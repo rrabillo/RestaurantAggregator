@@ -1,4 +1,4 @@
-// Ce code est censé s'exécuter côté serveur (Documentation google). Pour le faire fonctionner côté client, on utilisera le plugin CORS pour google chrome.
+// Passage sur l'API foursquare car trop de problème avec celle de google (limitations, côté serveur etc...)
 $(document).ready(function(){
 
 	// Petits ajustement côté front
@@ -19,7 +19,7 @@ $(document).ready(function(){
 	});
 	var template = function(objectRestau){
 		if(objectRestau.photoRestau){
-			if(objectRestau.is_open){
+			if(objectRestau.open){
 				var _tpl = [
 				'<div class="tiles">',
 					'<img src="'+objectRestau.photoRestau+'" />',
@@ -45,7 +45,7 @@ $(document).ready(function(){
 			}
 		}
 		else{
-			if(objectRestau.is_open){
+			if(objectRestau.open){
 				var _tpl = [
 				'<div class="tiles">',
 					'<img src="imgs/no.jpg" />',
@@ -79,30 +79,40 @@ $(document).ready(function(){
 	        alert('Il faut activer la géolocalisation');
 	    }
 	}
+
 	function searchFood(position){ 
-		var _apiKey = 'AIzaSyBQhDxOenA3n9phuqjQ9-vQOVUEiezbXPo';
-		var open;
-		var _req = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+position.coords.latitude+","+position.coords.longitude+"&radius="+_dist+"&types=restaurant&key="+_apiKey;//On génère la requete pour trouver des restaurants
+		var _clientID = 'VAUDV41YPWEJLMIVQOQNKBVS24C35UVH5ZXR3ZWA5QPYMMZN'; // Pour plus de commodité, on stocke les identifiants d'API
+		var _clientSecret = 'S34HXKB0MLU0C1PRPZF3CON2BJTTTO1RLJAJ1IVIRAFKRQSN'
+		var _req = "https://api.foursquare.com/v2/venues/search?client_id="+_clientID+"&client_secret="+_clientSecret+"&v=20130815&ll="+position.coords.latitude+","+position.coords.longitude+"&radius="+_dist+"&query=food"; // Requête générale pour trouver les restaurants aux alentours
 		$.get(_req,function(data){
-			_result = data.results; // On récupère un array qui contient des objets (un restaurant = un objet). On le stocke dans results
+			_result = data.response.venues; // On récupère un array qui contient des objets (un restaurant = un objet). On le stocke dans results
 			for (i = 0; i < _result.length; i++){ // On parcours maintenant results pour récupérer chaque restaurant
-				_reqPhoto = null;
-				if(typeof _result[i].photos !== 'undefined'){ // Petite condition qui permet de récupérer la photo associée au restaurant, si elle existe
-					 _photoRef = _result[i].photos[0].photo_reference;
-					 _reqPhoto = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1600&photoreference="+_photoRef+"&key="+_apiKey; // Nouvelle requete pour récupérer la photo associée
-				}
-				if(typeof _result[i].opening_hours !== 'undefined'){
-					open = _result[i].opening_hours.open_now;
-				}
-				else{
-					open = '';
-				}
-				restaurantBuilder(_result[i].name , _reqPhoto, open, _result[i].vicinity); // On appel la fonction restaurantBUilder à laquelle on passe des params
+				_photo = null;
+				_venueID = _result[i].id;
+				var _req2 = "https://api.foursquare.com/v2/venues/"+_venueID+"?client_id="+_clientID+"%20&client_secret="+_clientSecret+"&v=20130815" // Seconde requete sur chaque restaurant pour obtenir des détails
+				$.get(_req2,function(data){
+					console.log(data);
+					_restauObject = data.response.venue;
+					if(_restauObject.bestPhoto){
+					_photo = data.response.venue.bestPhoto.prefix+500+data.response.venue.bestPhoto.suffix;
+					}
+					else{
+						_photo = null;
+					}
+					if(_restauObject.hours){
+						_isOpen = _restauObject.hours.isOpen;
+					}
+					else{
+						_isOpen = 'Aucune information'
+					}
+					restaurantBuilder(_restauObject.name ,_photo, _restauObject.location, _isOpen); // On appel la fonction restaurantBUilder à laquelle on passe des params
+				});
 			}
 		});
 	}
-	function restaurantBuilder(name, photo, open, adresse){ // Création d'un objet qui contiendra les attributs du restaurant et sera transféré au template
-		_restaurant = {nomRestau: name, photoRestau: photo, is_open : open , place : adresse};	
+
+	function restaurantBuilder(name, photo ,adresse, isOpen){ // Création d'un objet qui contiendra les attributs du restaurant et sera transféré au template
+		_restaurant = {nomRestau: name, photoRestau :photo , place : adresse, open : isOpen};	
 		processTemplate(_restaurant);
 	}
 	function processTemplate(restaurant){
