@@ -4,29 +4,29 @@
 		<title>Restaurant Aggregator</title>
 		<meta charset="UTF-8"> </head>
 	</head>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9alxy1i0sVNd23KiSwB_t906yRGnCj9M&libraries=places"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQhDxOenA3n9phuqjQ9-vQOVUEiezbXPo&libraries=places"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="script.js"></script>
-<style>
-img{
-	display: inline-block;
-	max-width: 280px;
-}
-.active{
-	border:2px solid yellow;
-}
-</style>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="css/style.css" media="screen" /> 
 	<body>
-		<h1>Looking for food ?</h1>
-		<select>
-			<option value="100">100 mètres</option>
-			<option value="200">200 mètres</option>
-			<option value="300">300 mètres</option>
-			<option value="400">400 mètres</option>
-			<option value="500">500 mètres</option>
-			<option value="1000">1000 mètres</option>
-		</select>
-		<button>Yes !</button>
+		<div id="searchzone">
+			<div class="overlay">
+			</div>
+			<div id="searchform">
+				<h1>Looking for food ?</h1>
+				<select>
+					<option value="100">100 meters</option>
+					<option value="200">200 meters</option>
+					<option value="300">300 meters</option>
+					<option value="400">400 meters</option>
+					<option value="500">500 meters</option>
+					<option value="1000">1000 meters</option>
+				</select>
+				<button>Yes !</button>
+			</div>
+
+		</div>
 		<div id="results"></div>
 	</body>
 
