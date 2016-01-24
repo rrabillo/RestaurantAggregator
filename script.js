@@ -85,7 +85,6 @@ $(document).ready(function(){
 		var _req = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+position.coords.latitude+","+position.coords.longitude+"&radius="+_dist+"&types=restaurant&key="+_apiKey;//On génère la requete pour trouver des restaurants
 		$.get(_req,function(data){
 			_result = data.results; // On récupère un array qui contient des objets (un restaurant = un objet). On le stocke dans results
-			console.log(_result);
 			for (i = 0; i < _result.length; i++){ // On parcours maintenant results pour récupérer chaque restaurant
 				_reqPhoto = null;
 				if(typeof _result[i].photos !== 'undefined'){ // Petite condition qui permet de récupérer la photo associée au restaurant, si elle existe

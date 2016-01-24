@@ -20,6 +20,19 @@ body {
 #searchzone #searchform h1 {
   color: white;
 }
+#searchzone #searchform select {
+  border: 0;
+  background-color: #518BCF;
+  padding: 5px;
+  color: white;
+}
+#searchzone #searchform button {
+  background: white;
+  border: 0;
+  padding: 6px;
+  color: #518BCF;
+  font-weight: bold;
+}
 #searchzone .overlay {
   position: relative;
   z-index: 1;
@@ -56,7 +69,7 @@ body {
   left: 15px;
   right: 15px;
   bottom: 15px;
-  background-color: rgba(158, 158, 158, 0.9);
+  background-color: #518BCF;
   color: white;
   text-align: center;
   padding: 25px;
