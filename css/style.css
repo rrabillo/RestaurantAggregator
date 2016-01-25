@@ -22,7 +22,7 @@ body {
 }
 #searchzone #searchform select {
   border: 0;
-  background-color: #518BCF;
+  background-color: #518bcf;
   padding: 5px;
   color: white;
 }
@@ -69,7 +69,7 @@ body {
   left: 15px;
   right: 15px;
   bottom: 15px;
-  background-color: #518BCF;
+  background-color: #518bcf;
   color: white;
   text-align: center;
   padding: 25px;
@@ -89,5 +89,12 @@ body {
   top: 15px;
   right: 25px;
   color: red;
+  font-weight: bold;
+}
+.tiles .no-info {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #518bcf;
   font-weight: bold;
 }
